@@ -1,5 +1,4 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import {
   AppRegistry,
   asset,
@@ -18,28 +17,26 @@ export default class VighteR_VR_Client extends React.Component {
     super()
     this.state = {
       email: 'vlootfie@gmail.com',
-      type: ''
+      type: '',
+
     }
   }
 
   setRender = (type) => {
-    console.log(type, 'ini di render')
     this.setState({
       type: type
     })
   }
 
   handleSubmit = (type) => {
+    let setReady = {
+      ready: true,
+      type: type
+    }
     this.setRender(type)
-    console.log(type, 'asddd')
+    let splitEmail = this.state.email.split('@')[0]
     setTimeout(()=>{
-      db.ref(this.state.email.split('@')[0]).set({ready:true})
-      .then(() => {
-        db.ref(this.state.email.split('@')[0]).child('logs').set({type: type})
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      db.ref(splitEmail).set(setReady)
     }, 3000)
   }
 
@@ -58,6 +55,9 @@ export default class VighteR_VR_Client extends React.Component {
             <VrButton onClick={() => this.handleSubmit('hook')}>
               <Text style={styles.menuButton}>Hook</Text>
             </VrButton>
+            <VrButton onClick={() => this.handleSubmit('history')}>
+              <Text style={styles.menuButton}>History</Text>
+            </VrButton>
           </View>
         </View>
       );
@@ -75,7 +75,13 @@ export default class VighteR_VR_Client extends React.Component {
             <VrButton onClick={() => this.handleSubmit('hook')}>
               <Text style={styles.menuButton}>Hook</Text>
             </VrButton>
-            <Text style={styles.menuButton}> INI JAB </Text>
+            <VrButton onClick={() => this.handleSubmit('history')}>
+              <Text style={styles.menuButton}>History</Text>
+            </VrButton>
+          </View>
+          {/* bakal taro video */}
+          <View style={styles.video}>
+            <Text style={styles.test}> INI JAB </Text>
           </View>
         </View>
       )
@@ -93,7 +99,13 @@ export default class VighteR_VR_Client extends React.Component {
             <VrButton onClick={() => this.handleSubmit('hook')}>
               <Text style={styles.menuButton}>Hook</Text>
             </VrButton>
-            <Text style={styles.menuButton}> INI UPPERCUT </Text>
+            <VrButton onClick={() => this.handleSubmit('history')}>
+              <Text style={styles.menuButton}>History</Text>
+            </VrButton>
+          </View>
+          {/* bakal taro video */}
+          <View style={styles.video}>
+            <Text style={styles.test}> INI UPPERCUT </Text>
           </View>
         </View>
       )
@@ -111,17 +123,54 @@ export default class VighteR_VR_Client extends React.Component {
             <VrButton onClick={() => this.handleSubmit('hook')}>
               <Text style={styles.menuButton}>Hook</Text>
             </VrButton>
-            <Text style={styles.menuButton}> INI HOOK </Text>
+            <VrButton onClick={() => this.handleSubmit('history')}>
+              <Text style={styles.menuButton}>History</Text>
+            </VrButton>
+          </View>
+          {/* bakal taro video */}
+          <View style={styles.video}>
+            <Text style={styles.test}> INI HOOK </Text>
+          </View>
+        </View>
+      )
+    } else if (this.state.type === 'history') {
+      return (
+        <View>
+          <Pano source={asset('4k.jpg')}/>
+          <View>
+            <VrButton onClick={() => this.handleSubmit('jab')}>
+              <Text style={styles.menuButton}> Jab </Text>
+            </VrButton>
+            <VrButton onClick={() => this.handleSubmit('uppercut')}>
+              <Text style={styles.menuButton}> Uppercut </Text>
+            </VrButton>
+            <VrButton onClick={() => this.handleSubmit('hook')}>
+              <Text style={styles.menuButton}>Hook</Text>
+            </VrButton>
+            <VrButton onClick={() => this.handleSubmit('history')}>
+              <Text style={styles.menuButton}>History</Text>
+            </VrButton>
+          </View>
+          {/* bakal taro video */}
+          <View style={styles.video}>
+            <Text style={styles.test}> INI History </Text>
           </View>
         </View>
       )
     }
-    
-    
   }
 };
 
 const styles = {
+  test: {
+    fontSize: 0.5,
+    paddingLeft: 0.2,
+    paddingRight: 0.2,
+    margin: 0.4,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: '#212121',
+  },
   menuButton: {
     margin: 0.1,
     backgroundColor: '#EF5350',
@@ -132,7 +181,14 @@ const styles = {
     paddingRight: 0.2,
     textAlign: 'center',
     textAlignVertical: 'center',
-    transform: [{translate: [-4, 1, -7]}],
+    transform: [{translate: [-6, 2, -8]}, {rotateY: 35}],
+  },
+  video: {
+    backgroundColor: '#80D8FF',
+    layoutOrigin: [0.8, 1],
+    width: 6,
+    height: 4,
+    transform: [{translate: [7, 2, -8]}, {rotateY: -35}],   
   }
 }
 
