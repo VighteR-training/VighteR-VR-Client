@@ -64,7 +64,6 @@ export default class VighteR_VR_Client extends React.Component {
        ready: true,
        type: type
      }
-    var splitEmail = this.state.email.split('@')[0]
     this.setRender(type)
     let splitEmail = this.state.email.split('@')[0]
     setTimeout(()=>{
