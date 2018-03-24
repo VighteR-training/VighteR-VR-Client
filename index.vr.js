@@ -49,8 +49,15 @@ export default class VighteR_VR_Client extends React.Component {
         y: null,
         z: null
       },
-      power: ''
+      power: '',
+      isPractice: false
     }
+  }
+
+  setPractice = () => {
+    this.setState({
+      isPractice: true
+    })
   }
 
   setRender = (type) => {
@@ -60,14 +67,20 @@ export default class VighteR_VR_Client extends React.Component {
   }
 
   handleSubmit = (type) => {
-     let setReady = {
-       ready: true,
-       type: type
-     }
-    var splitEmail = this.state.email.split('@')[0]
+     
     this.setRender(type)
+    
+  }
+
+  setReady = (type) => {
+    let setReady = {
+      ready: true,
+      type: type
+    }
+   var splitEmail = this.state.email.split('@')[0]
     setTimeout(()=>{
       db.ref(splitEmail).set(setReady)
+      console.log('yes')
     }, 3000)
   }
 
@@ -83,6 +96,7 @@ export default class VighteR_VR_Client extends React.Component {
         this.setState({
           power: data.power
         })
+        console.log(this.state.power)
       }
     })
   }
@@ -91,7 +105,13 @@ export default class VighteR_VR_Client extends React.Component {
       return (
         <View>
           <Pano source={asset('chess-world.jpg')}/>
-          {this.state.type === '' ? (<Viewport type={'WELCOME PLEASE SELECT TYPE'}/>) : (<Viewport info={this.state.power} type={this.state.type}/>) }
+          {
+            this.state.type === '' ? (<Viewport/>) :
+            this.state.type === 'jab' ? (<Viewport setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
+            this.state.type === 'uppercut' ? (<Viewport setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
+            this.state.type === 'hook' ? (<Viewport setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
+            (<Viewport info={this.state.power} type={this.state.type} videoSrc={'history.mp4'}/>)
+          }
           <View
           style={{
             flexDirection: 'row',
