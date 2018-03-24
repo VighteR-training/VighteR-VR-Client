@@ -6,18 +6,44 @@ import {
   Text,
   View,
   VrButton,
-  Alert
+  Alert,
+  Box,
+  Image,
+  Animated,
+  Sound,
+  MediaPlayerState
 } from 'react-vr';
 import { MemoryRouter, Redirect, Route, Switch } from 'react-router';
-
+import Viewport from './src/components/ViewPort'
+import Button from './src/components/Button'
 import db from './firebase'
-
+const Easing = require('Easing');
+config = {sound: asset('select.wav'), playerState: new MediaPlayerState({})}
 export default class VighteR_VR_Client extends React.Component {
   constructor() {
     super()
     this.state = {
       email: 'vlootfie@gmail.com',
       type: '',
+      selectSound: 'select.wav',
+      buttonAnimate: [
+        {
+          animateType: 'jab',
+          img:'jab.png'
+        },
+        {
+          animateType:'uppercut',
+          img:'uppercut.png'
+        },
+        {
+          animateType:'hook',
+          img:'hook.png'
+        },
+        {
+          animateType:'history',
+          img:'history.png'
+        }
+      ],
       gyroscope: {
         x: null,
         y: null,
@@ -34,10 +60,10 @@ export default class VighteR_VR_Client extends React.Component {
   }
 
   handleSubmit = (type) => {
-    let setReady = {
-      ready: true,
-      type: type
-    }
+     let setReady = {
+       ready: true,
+       type: type
+     }
     var splitEmail = this.state.email.split('@')[0]
     this.setRender(type)
     setTimeout(()=>{
@@ -54,124 +80,37 @@ export default class VighteR_VR_Client extends React.Component {
   }
 
   render() {
-    if (this.state.type === '') {
       return (
         <View>
           <Pano source={asset('4k.jpg')}/>
-          <View>
-            <VrButton onClick={() => this.handleSubmit('jab')}>
-              <Text style={styles.menuButton}> Jab </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('uppercut')}>
-              <Text style={styles.menuButton}> Uppercut </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('hook')}>
-              <Text style={styles.menuButton}>Hook</Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('history')}>
-              <Text style={styles.menuButton}>History</Text>
-            </VrButton>
-          </View>
+          {this.state.type === '' ? (<Viewport type={'WELCOME PLEASE SELECT TYPE'}/>) : (<Viewport type={this.state.type}/>) }
+          <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            transform: [
+              {rotateX: -12},
+              {translate: [-1.5, 2, -3]},
+            ],
+            width: 3,
+          }}
+        >
+        {
+          this.state.buttonAnimate.map((animation, idx) => {
+            return (
+              <Button
+              key={idx}
+              handleSubmit={this.handleSubmit}
+              animateType={animation.animateType} 
+              img={animation.img} 
+              />
+            )
+          })
+        }  
+        </View>
         </View>
       );
-    } else if (this.state.type === 'jab') {
-      return (
-        <View>
-          <Pano source={asset('4k.jpg')}/>
-          <View>
-            <VrButton onClick={() => this.handleSubmit('jab')}>
-              <Text style={styles.menuButton}> Jab </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('uppercut')}>
-              <Text style={styles.menuButton}> Uppercut </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('hook')}>
-              <Text style={styles.menuButton}>Hook</Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('history')}>
-              <Text style={styles.menuButton}>History</Text>
-            </VrButton>
-          </View>
-          {/* bakal taro video */}
-          <View style={styles.video}>
-            <Text style={styles.test}> INI JAB </Text>
-          </View>
-        </View>
-      )
-    } else if (this.state.type === 'uppercut') {
-      return (
-        <View>
-          <Pano source={asset('4k.jpg')}/>
-          <View>
-            <VrButton onClick={() => this.handleSubmit('jab')}>
-              <Text style={styles.menuButton}> Jab </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('uppercut')}>
-              <Text style={styles.menuButton}> Uppercut </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('hook')}>
-              <Text style={styles.menuButton}>Hook</Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('history')}>
-              <Text style={styles.menuButton}>History</Text>
-            </VrButton>
-          </View>
-          {/* bakal taro video */}
-          <View style={styles.video}>
-            <Text style={styles.test}> INI UPPERCUT </Text>
-          </View>
-        </View>
-      )
-    } else if (this.state.type === 'hook') {
-      return (
-        <View>
-          <Pano source={asset('4k.jpg')}/>
-          <View>
-            <VrButton onClick={() => this.handleSubmit('jab')}>
-              <Text style={styles.menuButton}> Jab </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('uppercut')}>
-              <Text style={styles.menuButton}> Uppercut </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('hook')}>
-              <Text style={styles.menuButton}>Hook</Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('history')}>
-              <Text style={styles.menuButton}>History</Text>
-            </VrButton>
-          </View>
-          {/* bakal taro video */}
-          <View style={styles.video}>
-            <Text style={styles.test}> INI HOOK </Text>
-          </View>
-        </View>
-      )
-    } else if (this.state.type === 'history') {
-      return (
-        <View>
-          <Pano source={asset('4k.jpg')}/>
-          <View>
-            <VrButton onClick={() => this.handleSubmit('jab')}>
-              <Text style={styles.menuButton}> Jab </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('uppercut')}>
-              <Text style={styles.menuButton}> Uppercut </Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('hook')}>
-              <Text style={styles.menuButton}>Hook</Text>
-            </VrButton>
-            <VrButton onClick={() => this.handleSubmit('history')}>
-              <Text style={styles.menuButton}>History</Text>
-            </VrButton>
-          </View>
-          {/* bakal taro video */}
-          <View style={styles.video}>
-            <Text style={styles.test}> INI History </Text>
-          </View>
-        </View>
-      )
     }
-  }
 };
 
 const styles = {
