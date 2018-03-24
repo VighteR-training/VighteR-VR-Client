@@ -49,7 +49,7 @@ export default class VighteR_VR_Client extends React.Component {
         y: null,
         z: null
       },
-      power: null
+      power: ''
     }
   }
 
@@ -71,19 +71,27 @@ export default class VighteR_VR_Client extends React.Component {
     }, 3000)
   }
 
+  componentWillMount() {
+    this.fetchScore()
+  }
+
   fetchScore = () => {
     var splitEmail = this.state.email.split('@')[0]
     db.ref(splitEmail).on('value', (snapshot) => {
       let data = snapshot.val()
-      console.log(data, 'ini data')
+      if (!data.ready) {
+        this.setState({
+          power: data.power
+        })
+      }
     })
   }
 
   render() {
       return (
         <View>
-          <Pano source={asset('4k.jpg')}/>
-          {this.state.type === '' ? (<Viewport type={'WELCOME PLEASE SELECT TYPE'}/>) : (<Viewport type={this.state.type}/>) }
+          <Pano source={asset('chess-world.jpg')}/>
+          {this.state.type === '' ? (<Viewport type={'WELCOME PLEASE SELECT TYPE'}/>) : (<Viewport info={this.state.power} type={this.state.type}/>) }
           <View
           style={{
             flexDirection: 'row',
@@ -94,20 +102,20 @@ export default class VighteR_VR_Client extends React.Component {
             ],
             width: 3,
           }}
-        >
-        {
-          this.state.buttonAnimate.map((animation, idx) => {
-            return (
-              <Button
-              key={idx}
-              handleSubmit={this.handleSubmit}
-              animateType={animation.animateType} 
-              img={animation.img} 
-              />
-            )
-          })
-        }  
-        </View>
+          >
+          {
+            this.state.buttonAnimate.map((animation, idx) => {
+              return (
+                <Button
+                key={idx}
+                handleSubmit={this.handleSubmit}
+                animateType={animation.animateType} 
+                img={animation.img} 
+                />
+              )
+            })
+          }  
+          </View>
         </View>
       );
     }
