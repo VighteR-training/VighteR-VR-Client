@@ -18,7 +18,12 @@ export default class VighteR_VR_Client extends React.Component {
     this.state = {
       email: 'vlootfie@gmail.com',
       type: '',
-
+      gyroscope: {
+        x: null,
+        y: null,
+        z: null
+      },
+      power: null
     }
   }
 
@@ -33,11 +38,19 @@ export default class VighteR_VR_Client extends React.Component {
       ready: true,
       type: type
     }
+    var splitEmail = this.state.email.split('@')[0]
     this.setRender(type)
-    let splitEmail = this.state.email.split('@')[0]
     setTimeout(()=>{
       db.ref(splitEmail).set(setReady)
     }, 3000)
+  }
+
+  fetchScore = () => {
+    var splitEmail = this.state.email.split('@')[0]
+    db.ref(splitEmail).on('value', (snapshot) => {
+      let data = snapshot.val()
+      console.log(data, 'ini data')
+    })
   }
 
   render() {
