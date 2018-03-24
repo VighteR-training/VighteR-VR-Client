@@ -18,7 +18,6 @@ export default class VighteR_VR_Client extends React.Component {
     this.state = {
       email: 'vlootfie@gmail.com',
       type: '',
-
     }
   }
 
