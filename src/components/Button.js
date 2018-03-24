@@ -78,7 +78,7 @@ class Button extends React.Component {
         onEnter={() => this.animateIn()}
         onExit={() => this.animateOut()}>
 
-          <Text > {this.props.animateType} </Text>
+          <Text> {this.props.animateType} </Text>
 
           <Image
           style={{
