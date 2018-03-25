@@ -74,8 +74,10 @@ class Button extends React.Component {
 
         <VrButton
         style={{
+          opacity: 0.9,
           width: 0.7,
           height: 0.7,
+          opacity: this.props.opcButton,
           borderRadius: 0.1,
           backgroundColor: 'black',
           margin: 0.02,
@@ -87,7 +89,10 @@ class Button extends React.Component {
         onEnter={() => this.animateIn()}
         onExit={() => this.animateOut()}>
 
-          <Text> {this.props.animateType} </Text>
+          <Text
+            style={{
+              marginLeft:0.1
+            }}> {this.props.animateType} </Text>
 
           <Video
           style={{
