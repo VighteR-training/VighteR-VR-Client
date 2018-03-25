@@ -20,19 +20,20 @@ export default class Viewport extends React.Component{
       isPractice: false,
       isPunched: true,
       opc: new Animated.Value(0),
-      readyGo: 3,
+      readyGo: 4,
       isReadyGo: 4
     };
   }
 
   handleReadyGo = () => {
-       setInterval(()=>{
-        let c = this.state.readyGo - 1
-        this.setState({
-          readyGo: c
-        })
-        console.log(this.state.readyGo)
-      }, 1000)
+    let countDown = setInterval(()=>{
+      this.setState({
+        readyGo: this.state.readyGo - 1
+      })
+    }, 1000)
+    setTimeout(() => {
+      clearInterval(countDown)
+    }, 3000)
   }
 
   handlePractice = () => {
