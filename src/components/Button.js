@@ -33,7 +33,7 @@ class Button extends React.Component {
     this.setState({
       clickProgress: setTimeout(() => {
         console.log('set')
-        this.props.handleSubmit('jab')
+        this.props.handleSubmit(this.props.animateType)
       }, 3000)
     })
   }
