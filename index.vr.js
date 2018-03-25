@@ -83,7 +83,7 @@ export default class VighteR_VR_Client extends React.Component {
     setTimeout(()=>{
       db.ref(splitEmail).set(setReady)
       console.log('yes')
-    })
+    }, 3000)
   }
 
   setOpcButton = (num) => {
