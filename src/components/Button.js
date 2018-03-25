@@ -6,6 +6,7 @@ import {
   View,
   Text,
   VrButton,
+  Video
 } from 'react-vr';
 
 const Easing = require('Easing');
@@ -17,6 +18,7 @@ class Button extends React.Component {
 
     this.state = {
       animatedTranslation: new Animated.Value(0),
+      clickProgress: null
     };
   }
   animateIn = () => {
@@ -28,6 +30,12 @@ class Button extends React.Component {
         easing: Easing.in,
       }
     ).start();
+    this.setState({
+      clickProgress: setTimeout(() => {
+        console.log('set')
+        this.props.handleSubmit(this.props.animateType)
+      }, 3000)
+    })
   }
 
   animateOut = () => {
@@ -39,6 +47,7 @@ class Button extends React.Component {
         easing: Easing.in,
       }
     ).start();
+    clearTimeout(this.state.clickProgress)
   }
 
   onButtonClick = () => {
@@ -73,7 +82,7 @@ class Button extends React.Component {
           backgroundColor: 'black',
           margin: 0.02,
         }} 
-        onClickSound={{
+        onEnterSound={{
           wav: asset('select.wav')
         }}
         onClick={() => this.props.handleSubmit(`${this.props.animateType}`)}
@@ -85,14 +94,14 @@ class Button extends React.Component {
               marginLeft:0.1
             }}> {this.props.animateType} </Text>
 
-          <Image
+          <Video
           style={{
             width: 0.5,
             height: 0.5,
           }}
-          source={asset(`${this.props.img}`)}
+          source={{uri:'loading.gif', format:'gif'}}
           >
-          </Image>
+          </Video>
 
       </VrButton>
 
