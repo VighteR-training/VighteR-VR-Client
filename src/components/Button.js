@@ -65,8 +65,10 @@ class Button extends React.Component {
 
         <VrButton
         style={{
+          opacity: 0.9,
           width: 0.7,
           height: 0.7,
+          opacity: this.props.opcButton,
           borderRadius: 0.1,
           backgroundColor: 'black',
           margin: 0.02,

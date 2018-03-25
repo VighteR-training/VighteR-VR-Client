@@ -50,7 +50,9 @@ export default class VighteR_VR_Client extends React.Component {
         z: null
       },
       power: '',
-      isPractice: false
+      isPractice: false,
+      opc: 0,
+      opcButton: 1,
     }
   }
 
@@ -77,26 +79,36 @@ export default class VighteR_VR_Client extends React.Component {
       ready: true,
       type: type
     }
-   var splitEmail = this.state.email.split('@')[0]
+   let splitEmail = this.state.email.split('@')[0]
     setTimeout(()=>{
       db.ref(splitEmail).set(setReady)
       console.log('yes')
     }, 3000)
   }
 
+  setOpcButton = (num) => {
+    this.setState({
+      opcButton: num 
+    })
+  }
+
   componentWillMount() {
+    let splitEmail = this.state.email.split('@')[0]
+    db.ref(splitEmail).set({power: null, ready: false})
     this.fetchScore()
   }
 
   fetchScore = () => {
-    var splitEmail = this.state.email.split('@')[0]
+    let arr = []
+    let splitEmail = this.state.email.split('@')[0]
     db.ref(splitEmail).on('value', (snapshot) => {
       let data = snapshot.val()
       if (!data.ready) {
         this.setState({
-          power: data.power
+          power: data.power,
+          opc: this.state.opc += 0.3
         })
-        console.log(this.state.power)
+        console.log(this.state.power, this.state.opc)
       }
     })
   }
@@ -107,10 +119,10 @@ export default class VighteR_VR_Client extends React.Component {
           <Pano source={asset('chess-world.jpg')}/>
           {
             this.state.type === '' ? (<Viewport/>) :
-            this.state.type === 'jab' ? (<Viewport setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
-            this.state.type === 'uppercut' ? (<Viewport setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
-            this.state.type === 'hook' ? (<Viewport setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
-            (<Viewport info={this.state.power} type={this.state.type} videoSrc={'history.mp4'}/>)
+            this.state.type === 'jab' ? (<Viewport setOpcButton={this.setOpcButton} anim={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
+            this.state.type === 'uppercut' ? (<Viewport setOpcButton={this.setOpcButton} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
+            this.state.type === 'hook' ? (<Viewport setOpcButton={this.setOpcButton} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
+            (<Viewport setOpcButton={this.setOpcButton} info={this.state.power} type={this.state.type} videoSrc={'history.mp4'}/>)
           }
           <View
           style={{
@@ -127,6 +139,7 @@ export default class VighteR_VR_Client extends React.Component {
             this.state.buttonAnimate.map((animation, idx) => {
               return (
                 <Button
+                opcButton={this.state.opcButton}
                 key={idx}
                 handleSubmit={this.handleSubmit}
                 animateType={animation.animateType} 
