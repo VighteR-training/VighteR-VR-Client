@@ -52,7 +52,7 @@ export default class VighteR_VR_Client extends React.Component {
       power: '',
       isPractice: false,
       opc: 0,
-      opcButton: 1,
+      opcButton: 0.8,
     }
   }
 
@@ -83,6 +83,9 @@ export default class VighteR_VR_Client extends React.Component {
     setTimeout(()=>{
       db.ref(splitEmail).set(setReady)
       console.log('yes')
+      this.setState({
+        opc: 0
+      })
     }, 3000)
   }
 
@@ -106,7 +109,7 @@ export default class VighteR_VR_Client extends React.Component {
       if (!data.ready) {
         this.setState({
           power: data.power,
-          opc: this.state.opc += 0.3
+          opc: this.state.opc += 0.1
         })
         console.log(this.state.power, this.state.opc)
       }

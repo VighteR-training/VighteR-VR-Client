@@ -94,14 +94,14 @@ class Button extends React.Component {
               marginLeft:0.1
             }}> {this.props.animateType} </Text>
 
-          <Video
+          <Image
           style={{
             width: 0.5,
             height: 0.5,
           }}
-          source={{uri:'loading.gif', format:'gif'}}
+          source={asset(this.props.img)}
           >
-          </Video>
+          </Image>
 
       </VrButton>
 

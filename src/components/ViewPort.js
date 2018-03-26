@@ -10,6 +10,7 @@ import {
   Image,
   Animated
 } from 'react-vr';
+import { setTimeout } from 'core-js/library/web/timers';
 
 const Easing = require('Easing');
 export default class Viewport extends React.Component{
@@ -21,15 +22,24 @@ export default class Viewport extends React.Component{
       isPunched: true,
       opc: new Animated.Value(0),
       readyGo: 4,
-      isReadyGo: 4
+      isReadyGo: 4,
+      truePower: false,
+      powerAnimation: new Animated.Value(0),
+      randoms: setInterval(()=>{
+        this.setState({
+          randoms: Math.random()*(9999 - 1111) + 1111
+        }) 
+      }, 50)
     };
   }
 
   handleReadyGo = () => {
     let countDown = setInterval(()=>{
+      
       this.setState({
         readyGo: this.state.readyGo - 1
       })
+      console.log(this.state.readyGo)
     }, 1000)
     setTimeout(() => {
       clearInterval(countDown)
@@ -46,18 +56,26 @@ export default class Viewport extends React.Component{
     this.handleReadyGo()
   }
 
-  // animateIn = () => {
-  //   Animated.timing(
-  //     this.state.opc,
-  //     {
-  //       toValue: 1,
-  //       duration: 5000,
-  //       easing: Easing.in,
-  //     }
-  //   ).start();
-  // }
+  animateIn = () => {
+    //console.log('masuk')
+    Animated.timing(
+      this.state.powerAnimation,
+      {
+        toValue: -2.5,
+        duration: 6000,
+        easing: Easing.out,
+      }
+    ).start()
+  }
 
   componentDidMount(){
+    console.log(this.props.info, 'ini power')
+    if(this.props.info) {
+      this.setState({
+        truePower: this.props.info
+      })
+    }
+    // this.state.powerAnimation.setValue(-20)
     // console.log(this.state.readyGo)
     // let a = setInterval(()=>{
     //   this.setState({
@@ -76,6 +94,7 @@ export default class Viewport extends React.Component{
   }
   render(){
     if (this.state.isPractice) {
+      
       return (
         <View
         style={{
@@ -87,6 +106,13 @@ export default class Viewport extends React.Component{
           ]
         }}
       >
+      {this.state.readyGo <= 1 ? 
+      <View></View>
+      :
+      <Text
+      style={styles.test}
+      >{this.state.readyGo -1}</Text>
+      }
       { 
         this.state.isPunched ? (
           
@@ -163,9 +189,13 @@ export default class Viewport extends React.Component{
                 transform: [
                   {translate: [0, 0.2, 0]},
                 ]
-                }} playerState={this.state.playerState} />
+                }} />
                 <VrButton
-                onClick={() => this.handlePractice()}
+                onEnter={() => {
+                  setTimeout(()=>{
+                    this.handlePractice()
+                  }, 2000)
+                }}
                 style={{
                   height: 0.2, 
                   width: 0.4,
@@ -198,16 +228,30 @@ export default class Viewport extends React.Component{
 }
 
 const styles = {
+  randomNum: {
+    width: 5,
+    fontSize: 2,
+    fontWeight: 'bold',
+    layoutOrigin: [0.05, 0.5],
+    transform: [{translate: [0, 0, -8]}]
+  },
   test: {
-    fontSize: 1,
+    fontSize: 10,
     paddingLeft: 0.2,
     paddingRight: 0.2,
     margin: 0.4,
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: '#212121',
+    color: 'white',
     fontWeight: '300',
     layoutOrigin: [0.5, 0.5],
     transform: [{translate: [0, 2, -8]}]
   },
+  testing: {
+    paddingLeft: 0.2,
+    paddingRight: 0.2,
+    margin: 0.4,
+    layoutOrigin: [0.5, 0.5],
+    transform: [{translate: [0, 2, -8]}]    
+  }
 }
