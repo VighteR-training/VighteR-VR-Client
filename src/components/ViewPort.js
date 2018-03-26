@@ -5,13 +5,13 @@ import {
   Video,
   VideoControl,
   MediaPlayerState,
+  NativeModules,
   VrButton,
   asset,
   Image,
   Animated,
   Sound
 } from 'react-vr';
-import { setTimeout } from 'core-js/library/web/timers';
 
 const Easing = require('Easing');
 export default class Viewport extends React.Component{
@@ -23,13 +23,35 @@ export default class Viewport extends React.Component{
       isPunched: true,
       opc: new Animated.Value(0),
       readyGo: 4,
-      isReadyGo: 4,
       truePower: false,
       slideValue: new Animated.Value(0),
+      showPower: null,
+      statusPower: null,
       randoms: setInterval(()=>{
         this.setState({
           randoms: Math.random()*(9999 - 1111) + 1111
         }) 
+        if(this.props.info) {
+          console.log(this.props.statusPunch, 'ini status punch')
+          setTimeout(() => {
+            if (this.props.info > 9 ) {
+              this.setState({
+                statusPower: 'Good'
+              })
+              return ''
+            } else if(this.props.info > 6 && this.props.info < 10) {
+              this.setState({
+                statusPower: 'Need More Power'
+              })
+              return ''
+            } else {
+              this.setState({
+                statusPower: 'Too Weak'
+              })
+              return ''
+            } 
+          },4000)
+        }
       }, 50)
     };
   }
@@ -45,6 +67,7 @@ export default class Viewport extends React.Component{
     setTimeout(() => {
       clearInterval(countDown)
     }, 3000)
+
   }
 
   handlePractice = () => {
@@ -57,25 +80,45 @@ export default class Viewport extends React.Component{
     this.handleReadyGo()
   }
 
-  animateIn = () => {
-    Animated.timing(
-      this.state.slideValue,
-      {
-        toValue: 0,
-        duration: 1000,
-        delay: 1000,
-        easing: Easing.bounce
-      }
-    )
+  setDisplayPower = () => {
+    if (this.props.info) {
+      setTimeout(()=>{
+        this.setState({
+          randoms: this.props.info
+        })
+      },9000)
+    }
+   
+  }
+
+  cancelQuit = () => {
+    clearTimeout(this.handleQuit)
+  }
+
+  handleQuit = () => {
+    setTimeout(()=>{
+      NativeModules.LinkingManager.openURL('http://localhost:8082/vr/')
+    }, 2000)  
   }
 
   componentDidMount(){
-    console.log(this.props.info, 'ini power')
-    if(this.props.info) {
-      this.setState({
-        truePower: this.props.info
-      })
-    }
+    // this.setState({
+    //   randoms: setInterval(()=>{
+    //     this.setState({
+    //       randoms: Math.random()*(9999 - 1111) + 1111
+    //     }) 
+    //   }, 50)
+    // })
+    // setTimeout(() => {
+    //   this.setDisplayPower()
+    // }, 3000)
+    
+    // console.log(this.props.info, 'ini power')
+    // if(this.props.info) {
+    //   this.setState({
+    //     truePower: this.props.info
+    //   })
+    // }
     // this.state.powerAnimation.setValue(-20)
     // console.log(this.state.readyGo)
     // let a = setInterval(()=>{
@@ -90,12 +133,9 @@ export default class Viewport extends React.Component{
     // } else {
       
     // }
-    
-
   }
   render(){
     if (this.state.isPractice ) {
-      
       return (
         <View
         style={{
@@ -129,23 +169,65 @@ export default class Viewport extends React.Component{
       }
       {
         this.props.opacity === 1 ? 
-        <View>
+
+        (<View>
         <Sound
         source={{
         mp3: asset('crash.mp3')
         }}
         volume={10}
       />
-      <Text style={styles.randomNum}>{this.state.randoms.toFixed()}</Text>
-      <Sound
-        source={{
-        mp3: asset('random.wav')
-        }}
-        volume={10}
-      />
-      </View> 
+      {
+        this.state.statusPower ?
+          this.props.statusPunch ?  
+          (<View>
+            <VrButton
+              onEnter={() => {
+                this.handleQuit()
+              }}
+            >
+            <Text style={styles.randomNum}>{this.state.statusPower}</Text>
+            </VrButton>
+            {/* <Sound
+              source={{
+              mp3: asset('random.wav')
+              }}
+              volume={10}
+            /> */}
+          </View>)
+         :
+         (
+          <View>
+            <VrButton
+              onEnter={() => {
+                console.log(this.props.lastPunch)
+              }}
+            >
+            <Text style={styles.randomNum}>You Did The Wrong Move</Text>
+            </VrButton>
+            {/* <Sound
+              source={{
+              mp3: asset('random.wav')
+              }}
+              volume={10}
+            /> */}
+          </View>
+          )
+        :
+        (<View>
+        <Text style={styles.randomNum}>{this.state.randoms}</Text>
+        <Sound
+          source={{
+          mp3: asset('random.wav')
+          }}
+          volume={10}
+        />
+      </View>)
+      
+      }
+      </View>) 
       :
-      <View></View>
+      (<View></View>)
       }
         {/* <VrButton
                 onClick={() => this.handlePractice()}
@@ -237,11 +319,12 @@ export default class Viewport extends React.Component{
 
 const styles = {
   randomNum: {
+    textShadowColor:'#FF0000',
     width: 5,
     fontSize: 2,
     fontWeight: 'bold',
     layoutOrigin: [0.05, 0.5],
-    transform: [{translate: [0, 0, -8]}]
+    transform: [{translate: [0, -2, -8]}]
   },
   test: {
     fontSize: 10,
