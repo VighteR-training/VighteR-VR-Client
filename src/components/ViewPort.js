@@ -8,7 +8,8 @@ import {
   VrButton,
   asset,
   Image,
-  Animated
+  Animated,
+  Sound
 } from 'react-vr';
 import { setTimeout } from 'core-js/library/web/timers';
 
@@ -24,7 +25,7 @@ export default class Viewport extends React.Component{
       readyGo: 4,
       isReadyGo: 4,
       truePower: false,
-      powerAnimation: new Animated.Value(0),
+      slideValue: new Animated.Value(0),
       randoms: setInterval(()=>{
         this.setState({
           randoms: Math.random()*(9999 - 1111) + 1111
@@ -57,15 +58,15 @@ export default class Viewport extends React.Component{
   }
 
   animateIn = () => {
-    //console.log('masuk')
     Animated.timing(
-      this.state.powerAnimation,
+      this.state.slideValue,
       {
-        toValue: -2.5,
-        duration: 6000,
-        easing: Easing.out,
+        toValue: 0,
+        duration: 1000,
+        delay: 1000,
+        easing: Easing.bounce
       }
-    ).start()
+    )
   }
 
   componentDidMount(){
@@ -93,7 +94,7 @@ export default class Viewport extends React.Component{
 
   }
   render(){
-    if (this.state.isPractice) {
+    if (this.state.isPractice ) {
       
       return (
         <View
@@ -107,38 +108,45 @@ export default class Viewport extends React.Component{
         }}
       >
       {this.state.readyGo <= 1 ? 
-      <View></View>
+        <View>
+        <Image 
+        style={{
+          width: 1,
+          height: 1,
+          opacity: this.props.opacity,
+          transform: [
+            {translate:[1.02, -0.8, 0.8]}
+          ]
+        }}
+        source={asset('demeg.png')}
+        >
+        </Image>
+      </View>
       :
       <Text
       style={styles.test}
       >{this.state.readyGo -1}</Text>
       }
-      { 
-        this.state.isPunched ? (
-          
-          <Image 
-          style={{
-            width: 1,
-            height: 1,
-            opacity: this.props.anim,
-            transform: [
-              {translate:[1.02, -0.8, 0.8]}
-            ]
-          }}
-          source={asset('demeg.png')}
-          ></Image>
-        )
-          :
-          <View 
-          style={{
-            width: 1,
-            height: 1,
-            transform: [
-              {translate:[1.02, -0.8, 0.8]}
-            ]
-          }}
-          ></View>
-       }
+      {
+        this.props.opacity === 1 ? 
+        <View>
+        <Sound
+        source={{
+        mp3: asset('crash.mp3')
+        }}
+        volume={10}
+      />
+      <Text style={styles.randomNum}>{this.state.randoms.toFixed()}</Text>
+      <Sound
+        source={{
+        mp3: asset('random.wav')
+        }}
+        volume={10}
+      />
+      </View> 
+      :
+      <View></View>
+      }
         {/* <VrButton
                 onClick={() => this.handlePractice()}
                 style={{

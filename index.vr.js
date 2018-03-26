@@ -109,9 +109,8 @@ export default class VighteR_VR_Client extends React.Component {
       if (!data.ready) {
         this.setState({
           power: data.power,
-          opc: this.state.opc += 0.1
+          opc: 1
         })
-        console.log(this.state.power, this.state.opc)
       }
     })
   }
@@ -122,9 +121,9 @@ export default class VighteR_VR_Client extends React.Component {
           <Pano source={asset('chess-world.jpg')}/>
           {
             this.state.type === '' ? (<Viewport/>) :
-            this.state.type === 'jab' ? (<Viewport setOpcButton={this.setOpcButton} anim={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
-            this.state.type === 'uppercut' ? (<Viewport setOpcButton={this.setOpcButton} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
-            this.state.type === 'hook' ? (<Viewport setOpcButton={this.setOpcButton} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
+            this.state.type === 'jab' ? (<Viewport setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
+            this.state.type === 'uppercut' ? (<Viewport setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
+            this.state.type === 'hook' ? (<Viewport setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
             (<Viewport setOpcButton={this.setOpcButton} info={this.state.power} type={this.state.type} videoSrc={'history.mp4'}/>)
           }
           <View
