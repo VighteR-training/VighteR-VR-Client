@@ -33,26 +33,35 @@ export default class Viewport extends React.Component{
         this.setState({
           randoms: Math.random()*(9999 - 1111) + 1111
         }) 
-        if(this.props.info) {
-          console.log(this.props.statusPunch, 'ini status punch')
+        if(this.props.info && this.props.statusPunch) {
           setTimeout(() => {
-            if (this.props.info > 9 ) {
-              this.setState({
-                statusPower: 'Good'
-              })
-              return ''
-            } else if(this.props.info > 6 && this.props.info < 10) {
-              this.setState({
-                statusPower: 'Need More Power'
-              })
-              return ''
-            } else {
+            console.log('masuk ke true interval')
+            if(this.props.info < 4) {
               this.setState({
                 statusPower: 'Too Weak'
               })
-              return ''
             } 
+            else if (this.props.info < 7 ) {
+              this.setState({
+                statusPower: 'Need More Power'
+              })
+            } else if(this.props.info < 11) {
+              this.setState({
+                statusPower: 'Good'
+              })
+            } else {
+              this.setState({
+                statusPower: 'Amazing'
+              })
+            }
           },4000)
+        } else if(this.props.info && !this.props.statusPunch) {
+          console.log(' masuk wrong')
+          setTimeout(() => {
+            this.setState({
+              statusPower: 'You did The Wrong Move'
+            })
+          }, 4000)
         }
       }, 50)
     };
@@ -102,11 +111,10 @@ export default class Viewport extends React.Component{
       status: this.state.statusPower,
       power: Math.round(this.props.info.toFixed())
     }
-    console.log(payload, 'ini payload')
     setTimeout(()=>{
       axios.post('http://35.187.249.39:8000/log', payload, {
         headers: {
-          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWI5MTdlZjg3ZWZkNzAwMTA5M2I2YmEiLCJuYW1lIjoiYW5ncmhhIiwiZW1haWwiOiJhbmdyaGFAZ21haWwuY29tIiwiaWF0IjoxNTIyMDc5NzI3fQ.sTzA6Sd1LxITt9ur0ni-1uWvN3zC2Xmx4NOIajm2q2Q'
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWI3ZmMzOWYzODM1NzBlYTk3ZGNjMjkiLCJuYW1lIjoiTHV0aGZpIiwiZW1haWwiOiJqa3QubHV0aGZpQGdtYWlsLmNvbSIsImlhdCI6MTUyMjEzNzU2MX0.fo7cp5Mp11STOJhVC0Al33Uw7_JBUUtOmxQZaOF3biA'
         }
       })
         .then(response => {
@@ -121,11 +129,10 @@ export default class Viewport extends React.Component{
   componentDidMount() {
     axios.get('http://35.187.249.39:8000/log', {
       headers: {
-        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWI5MTdlZjg3ZWZkNzAwMTA5M2I2YmEiLCJuYW1lIjoiYW5ncmhhIiwiZW1haWwiOiJhbmdyaGFAZ21haWwuY29tIiwiaWF0IjoxNTIyMDc5NzI3fQ.sTzA6Sd1LxITt9ur0ni-1uWvN3zC2Xmx4NOIajm2q2Q'
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWI3ZmMzOWYzODM1NzBlYTk3ZGNjMjkiLCJuYW1lIjoiTHV0aGZpIiwiZW1haWwiOiJqa3QubHV0aGZpQGdtYWlsLmNvbSIsImlhdCI6MTUyMjEzNzU2MX0.fo7cp5Mp11STOJhVC0Al33Uw7_JBUUtOmxQZaOF3biA'
       }
     })
       .then(response => {
-        console.log(response.data.payload, 'asem')
         this.setState({
           logs: response.data.payload
         })
@@ -210,6 +217,10 @@ export default class Viewport extends React.Component{
                         borderRadius: 0.1,
                         backgroundColor: 'black',
                         margin: 0.02,
+                        layoutOrigin: [0.5, 0.5],
+                        transform: [
+                          {translate: [-0.5, 2, -8]}
+                        ]
                       }} 
                       onEnter={() => {
                         this.handleQuit()
@@ -242,19 +253,37 @@ export default class Viewport extends React.Component{
       )
     } else if (this.props.type === 'history' && !this.state.isPractice) {
       return (
-        <View style={styles.table}>
-          {
-            this.state.logs.map(log => {
-              return (
-                <View key={log._id}>
-                  <Text style={{fontSize: 0.2}}> GROAAAAAR </Text>
-                  <Text style={{fontSize: 0.2}}> {log.type} </Text>
-                  <Text style={{fontSize: 0.2}}> {log.power} </Text>
-                  <Text style={{fontSize: 0.2}}> {log.status} </Text>
-                </View>
-              )
-            })
-          }
+        <View>
+          <Text style={{
+            fontSize: 0.3,
+            borderRadius: 0.05,
+            backgroundColor: 'rgba(0, 0, 0, .5)',
+            width: 10,
+            textAlign: 'center',
+            justifyContent: 'center',
+            layoutOrigin: [0.5, 0.5],
+            transform: [
+              {translate: [-0.5, 2, -8]}
+            ]
+          }}> ceritanya NAMA </Text>
+          <View style={styles.table}>
+            {
+              this.state.logs.map(log => {
+                return (
+                  <View key={log._id} style={{ 
+                    backgroundColor: 'rgba(0, 0, 0, .5)', 
+                    width: 3, 
+                    margin: .1, 
+                    padding: .1
+                  }}>
+                    <Text style={{fontSize: 0.2, textAlign: 'center'}}> Type: {log.type} </Text>
+                    <Text style={{fontSize: 0.2, textAlign: 'center'}}> Power: {log.power} </Text>
+                    <Text style={{fontSize: 0.2, textAlign: 'center'}}> Status: {log.status} </Text>
+                  </View>
+                )
+              })
+            }
+          </View>
         </View>
       )
     } else {
@@ -277,15 +306,7 @@ export default class Viewport extends React.Component{
           {this.props.type 
           ? (
             <View>
-              <Video style={{width: 3.0, height:2.0, }} source={{uri: this.props.videoSrc}}  playerState={this.state.playerState} />
-              <VideoControl 
-              style={{
-                height: 0.2,
-                width: 3.0,
-                transform: [
-                  {translate: [0, 0.2, 0]},
-                ]
-                }} />
+              <Video style={{width: 3.0, height:2.0, }} source={{uri: this.props.videoSrc}} />
                 <VrButton
                 onEnter={() => {
                   setTimeout(()=>{
@@ -353,10 +374,13 @@ const styles = {
   },
   table: {
     flexWrap: 'wrap',
-    flexDirection: 'column',
-    width: 15,
+    flexDirection: 'row',
+    marginBottom: -1,
+    justifyContent: 'center',
+    width: 16,
+    layoutOrigin: [0.5, 0.5],
     transform: [
-      {translate: [-1.5, 1.7, -3]},
+      {translate: [-0.5, 0.8, -8]}
     ]
   }
 }
