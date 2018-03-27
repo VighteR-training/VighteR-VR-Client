@@ -52,7 +52,9 @@ export default class VighteR_VR_Client extends React.Component {
       power: '',
       isPractice: false,
       opc: 0,
-      opcButton: 1,
+      opcButton: 0.8,
+      statusPunch: null,
+      lastPunch: []
     }
   }
 
@@ -83,6 +85,9 @@ export default class VighteR_VR_Client extends React.Component {
     setTimeout(()=>{
       db.ref(splitEmail).set(setReady)
       console.log('yes')
+      this.setState({
+        opc: 0
+      })
     }, 3000)
   }
 
@@ -99,16 +104,16 @@ export default class VighteR_VR_Client extends React.Component {
   }
 
   fetchScore = () => {
-    let arr = []
     let splitEmail = this.state.email.split('@')[0]
     db.ref(splitEmail).on('value', (snapshot) => {
       let data = snapshot.val()
       if (!data.ready) {
         this.setState({
           power: data.power,
-          opc: this.state.opc += 0.3
+          statusPunch: data.isTrue,
+          lastPunch: [...this.state.lastPunch, data.isTrue],
+          opc: 1
         })
-        console.log(this.state.power, this.state.opc)
       }
     })
   }
@@ -116,12 +121,21 @@ export default class VighteR_VR_Client extends React.Component {
   render() {
       return (
         <View>
-          <Pano source={asset('chess-world.jpg')}/>
+          <Pano source={asset('field.jpg')}/>
           {
-            this.state.type === '' ? (<Viewport/>) :
-            this.state.type === 'jab' ? (<Viewport setOpcButton={this.setOpcButton} anim={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
-            this.state.type === 'uppercut' ? (<Viewport setOpcButton={this.setOpcButton} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
-            this.state.type === 'hook' ? (<Viewport setOpcButton={this.setOpcButton} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
+            this.state.type === '' ? (<View style={{
+              width: 3,
+              height: 2,
+              opacity: 0.9,
+              borderRadius: 0.1,
+              margin: 0.02,
+              transform: [
+                {translate: [-1.5, 1.7, -3]},
+              ]
+              }}></View>) :
+            this.state.type === 'jab' ? (<Viewport lastPunch={this.state.lastPunch} statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
+            this.state.type === 'uppercut' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
+            this.state.type === 'hook' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
             (<Viewport setOpcButton={this.setOpcButton} info={this.state.power} type={this.state.type} videoSrc={'history.mp4'}/>)
           }
           <View
