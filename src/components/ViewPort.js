@@ -28,6 +28,7 @@ export default class Viewport extends React.Component{
       slideValue: new Animated.Value(0),
       showPower: null,
       statusPower: null,
+      logs: [],
       randoms: setInterval(()=>{
         this.setState({
           randoms: Math.random()*(9999 - 1111) + 1111
@@ -354,5 +355,8 @@ const styles = {
     flexWrap: 'wrap',
     flexDirection: 'column',
     width: 15,
+    transform: [
+      {translate: [-1.5, 1.7, -3]},
+    ]
   }
 }

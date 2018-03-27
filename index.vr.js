@@ -121,9 +121,18 @@ export default class VighteR_VR_Client extends React.Component {
   render() {
       return (
         <View>
-          <Pano source={asset('chess-world.jpg')}/>
+          <Pano source={asset('field.jpg')}/>
           {
-            this.state.type === '' ? (<Viewport/>) :
+            this.state.type === '' ? (<View style={{
+              width: 3,
+              height: 2,
+              opacity: 0.9,
+              borderRadius: 0.1,
+              margin: 0.02,
+              transform: [
+                {translate: [-1.5, 1.7, -3]},
+              ]
+              }}></View>) :
             this.state.type === 'jab' ? (<Viewport lastPunch={this.state.lastPunch} statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
             this.state.type === 'uppercut' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
             this.state.type === 'hook' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
