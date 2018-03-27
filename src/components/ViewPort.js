@@ -146,7 +146,6 @@ export default class Viewport extends React.Component{
         console.log(err)
       })
   }
-
   render(){
     if (this.state.isPractice ) {
       return (
@@ -213,7 +212,7 @@ export default class Viewport extends React.Component{
                 :
                 (
                   <View>
-                    <Text style={styles.randomNum}>You Did The Wrong Move</Text>
+                    <Text style={{...styles.randomNum, fontSize: 1}}>You Did The Wrong Move</Text>
                     <VrButton
                       style={{
                         opacity: 0.9,
@@ -236,6 +235,7 @@ export default class Viewport extends React.Component{
                     </VrButton>
                   </View>
                 )
+            //ini status powernya 
             :
             (
               <View>
@@ -318,6 +318,9 @@ export default class Viewport extends React.Component{
                   setTimeout(()=>{
                     this.handlePractice()
                   }, 2000)
+                }}
+                onExit={() => {
+                  
                 }}
                 style={{
                   
