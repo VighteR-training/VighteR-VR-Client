@@ -12,6 +12,7 @@ import {
   Animated,
   Sound
 } from 'react-vr';
+import axios from 'axios'
 
 const Easing = require('Easing');
 export default class Viewport extends React.Component{
@@ -96,9 +97,25 @@ export default class Viewport extends React.Component{
   }
 
   handleQuit = () => {
+    let payload = {
+      type: this.props.type,
+      status: this.state.statusPower,
+      power: this.props.info
+    }
+    console.log(payload, 'ini payload')
     setTimeout(()=>{
-      NativeModules.LinkingManager.openURL('http://localhost:8082/vr/')
-    }, 2000)  
+      axios.post('http://35.187.249.39:8000/log', payload, {
+        headers: {
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWI5MTdlZjg3ZWZkNzAwMTA5M2I2YmEiLCJuYW1lIjoiYW5ncmhhIiwiZW1haWwiOiJhbmdyaGFAZ21haWwuY29tIiwiaWF0IjoxNTIyMDc5NzI3fQ.sTzA6Sd1LxITt9ur0ni-1uWvN3zC2Xmx4NOIajm2q2Q'
+        }
+      })
+        .then(response => {
+          NativeModules.LinkingManager.openURL('http://localhost:8081/vr/')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }, 2000)
   }
 
   componentDidMount(){
@@ -215,7 +232,7 @@ export default class Viewport extends React.Component{
           )
         :
         (<View>
-        <Text style={styles.randomNum}>{this.state.randoms}</Text>
+        <Text style={styles.randomNum}>{this.state.randoms.toFixed()}</Text>
         <Sound
           source={{
           mp3: asset('random.wav')
