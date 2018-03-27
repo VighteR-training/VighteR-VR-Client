@@ -265,7 +265,7 @@ export default class Viewport extends React.Component{
             transform: [
               {translate: [-0.5, 2, -8]}
             ]
-          }}> HISTORY </Text>
+          }}> LOGS </Text>
           <View style={styles.table}>
             {
               this.state.logs.map(log => {
@@ -306,37 +306,39 @@ export default class Viewport extends React.Component{
           {this.props.type 
           ? (
             <View>
-              <Video style={{width: 3.0, height:2.0, }} source={{uri: this.props.videoSrc}} />
-                <VrButton
-                onEnter={() => {
-                  setTimeout(()=>{
-                    this.handlePractice()
-                  }, 2000)
-                }}
+              <Video style={{width: 3.0, height:2.0, }} source={{uri: this.props.videoSrc}}  />
+          {/* bikin clear interval dari buttonnya pake state, liat di vrtoe */}
+              <VrButton
+                  onEnter={() => {
+                    console.log('msk prc')
+                    setTimeout(()=>{
+                      this.handlePractice()
+                    }, 3000)
+                  }}
+                  style={{
+                    
+                    justifyContent: 'center',
+                    opacity: 0.8,
+                    margin: 0.1,
+                    height: 0.2, 
+                    width: 3.5,
+                    backgroundColor: 'rgb(21, 2, 84)',
+                    transform: [
+                      {translate: [-0.35, 0.05, -0.5]},
+                    ]
+                  }}
+                >
+                <Text
                 style={{
-                  
-                  justifyContent: 'center',
-                  opacity: 0.8,
-                  margin: 0.1,
-                  height: 0.2, 
+                  textAlign: 'center',
                   width: 3.5,
-                  backgroundColor: 'rgb(21, 2, 84)',
                   transform: [
-                    {translate: [-0.35, 0.05, -0.5]},
+                    {translate: [0.04, -0.01, 0]},
                   ]
-                  }}>
-            <Text
-            style={{
-
-              textAlign: 'center',
-              width: 3.5,
-              transform: [
-                {translate: [0.04, -0.01, 0]},
-              ]
-              }}
-            >Practice</Text>
-          </VrButton>
-            </View>
+                  }}
+                >Practice</Text>
+              </VrButton>
+          </View>
           )
           :
           (
