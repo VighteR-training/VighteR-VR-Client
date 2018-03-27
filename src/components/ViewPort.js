@@ -36,11 +36,6 @@ export default class Viewport extends React.Component{
         if(this.props.powerInfo && this.props.statusPunch) {
           setTimeout(() => {
             console.log('masuk ke true interval')
-            // if(this.props.powerInfo === 0) {
-            //   this.setState({
-            //     statusPower: 'Very Weak'
-            //   })
-            // }
             if(this.props.powerInfo < 4) {
               this.setState({
                 statusPower: 'Too Weak'
@@ -94,17 +89,6 @@ export default class Viewport extends React.Component{
     this.props.setReady(this.props.type)
     this.handleReadyGo()
   }
-
-  // setDisplayPower = () => {
-  //   if (this.props.powerInfo) {
-  //     setTimeout(()=>{
-  //       this.setState({
-  //         randoms: this.props.powerInfo
-  //       })
-  //     },9000)
-  //   }
-   
-  // }
 
   cancelQuit = () => {
     clearTimeout(this.handleQuit)
@@ -160,6 +144,7 @@ export default class Viewport extends React.Component{
           }}
         >
           {
+            //jika ready go kurang kurang dari atau sama dengan 1 tamplikan crash
             this.state.readyGo <= 1 ? 
               (<View>
                 <Image 
@@ -176,10 +161,12 @@ export default class Viewport extends React.Component{
                 </Image>
               </View>)
             :
+            //jika tidak tamplkan angka 1
             <Text style={styles.test} >{this.state.readyGo -1} </Text>
           }
 
           {
+            //jika data angka power sudah ada
             this.props.opacity === 1 ? (
               <View>
                 <Sound
@@ -187,8 +174,14 @@ export default class Viewport extends React.Component{
                   volume={10}
                 />
             {
+              //if statusPower sudah terisi
               this.state.statusPower ?
-                this.props.statusPunch ? (
+
+              //if statusPunch(gerakanya benar apa tidak)
+                this.props.statusPunch ?
+
+                // jika benar tampilkan status powernya (good bad to weak dll)
+                 (
                   <View>
                     <Text style={styles.randomNum}>{this.state.statusPower}</Text>
                     <VrButton
@@ -210,6 +203,7 @@ export default class Viewport extends React.Component{
                   </View>
                 )
                 :
+                //else status punchnya salah tampilakan wrong move
                 (
                   <View>
                     <Text style={{...styles.randomNum, fontSize: 1}}>You Did The Wrong Move</Text>
@@ -235,8 +229,8 @@ export default class Viewport extends React.Component{
                     </VrButton>
                   </View>
                 )
-            //ini status powernya 
             :
+            //else ini status powernya belum terisi tampilkan angka randomnya
             (
               <View>
                 <Text style={styles.randomNum}>{this.state.randoms.toFixed()}</Text>
@@ -250,7 +244,8 @@ export default class Viewport extends React.Component{
       
             }
             </View>
-          ) 
+          )
+          //jika opactinya selain 1 (belum terisi datanya) tampilkan view kosong
             :
             (<View></View>)
           }
