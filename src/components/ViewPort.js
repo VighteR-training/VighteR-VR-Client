@@ -72,7 +72,6 @@ export default class Viewport extends React.Component{
   }
 
   handlePractice = () => {
-    console.log('masuk sini')
     this.setState({
       isPractice: true
     })
@@ -100,7 +99,7 @@ export default class Viewport extends React.Component{
     let payload = {
       type: this.props.type,
       status: this.state.statusPower,
-      power: this.props.info
+      power: Math.round(this.props.info.toFixed())
     }
     console.log(payload, 'ini payload')
     setTimeout(()=>{
@@ -118,155 +117,144 @@ export default class Viewport extends React.Component{
     }, 2000)
   }
 
-  componentDidMount(){
-    // this.setState({
-    //   randoms: setInterval(()=>{
-    //     this.setState({
-    //       randoms: Math.random()*(9999 - 1111) + 1111
-    //     }) 
-    //   }, 50)
-    // })
-    // setTimeout(() => {
-    //   this.setDisplayPower()
-    // }, 3000)
-    
-    // console.log(this.props.info, 'ini power')
-    // if(this.props.info) {
-    //   this.setState({
-    //     truePower: this.props.info
-    //   })
-    // }
-    // this.state.powerAnimation.setValue(-20)
-    // console.log(this.state.readyGo)
-    // let a = setInterval(()=>{
-    //   this.setState({
-    //     readyGo: this.state.readyGo--
-    //   })
-    //   console.log('set')
-    // }, 1000)
-    // if (this.state.readyGo <= 0) {
-    //   console.log('berenti')
-    //   clearInterval(a)
-    // } else {
-      
-    // }
+  componentDidMount() {
+    axios.get('http://35.187.249.39:8000/log', {
+      headers: {
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWI5MTdlZjg3ZWZkNzAwMTA5M2I2YmEiLCJuYW1lIjoiYW5ncmhhIiwiZW1haWwiOiJhbmdyaGFAZ21haWwuY29tIiwiaWF0IjoxNTIyMDc5NzI3fQ.sTzA6Sd1LxITt9ur0ni-1uWvN3zC2Xmx4NOIajm2q2Q'
+      }
+    })
+      .then(response => {
+        console.log(response.data.payload, 'asem')
+        this.setState({
+          logs: response.data.payload
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
+
   render(){
     if (this.state.isPractice ) {
       return (
         <View
-        style={{
-          width: 3,
-          height: 2,
-          margin: 0.02,
-          transform: [
-            {translate: [-1.5, 1.7, -3]},
-          ]
-        }}
-      >
-      {this.state.readyGo <= 1 ? 
-        <View>
-        <Image 
-        style={{
-          width: 1,
-          height: 1,
-          opacity: this.props.opacity,
-          transform: [
-            {translate:[1.02, -0.8, 0.8]}
-          ]
-        }}
-        source={asset('demeg.png')}
-        >
-        </Image>
-      </View>
-      :
-      <Text
-      style={styles.test}
-      >{this.state.readyGo -1}</Text>
-      }
-      {
-        this.props.opacity === 1 ? 
-
-        (<View>
-        <Sound
-        source={{
-        mp3: asset('crash.mp3')
-        }}
-        volume={10}
-      />
-      {
-        this.state.statusPower ?
-          this.props.statusPunch ?  
-          (<View>
-            <VrButton
-              onEnter={() => {
-                this.handleQuit()
-              }}
-            >
-            <Text style={styles.randomNum}>{this.state.statusPower}</Text>
-            </VrButton>
-            {/* <Sound
-              source={{
-              mp3: asset('random.wav')
-              }}
-              volume={10}
-            /> */}
-          </View>)
-         :
-         (
-          <View>
-            <VrButton
-              onEnter={() => {
-                console.log(this.props.lastPunch)
-              }}
-            >
-            <Text style={styles.randomNum}>You Did The Wrong Move</Text>
-            </VrButton>
-            {/* <Sound
-              source={{
-              mp3: asset('random.wav')
-              }}
-              volume={10}
-            /> */}
-          </View>
-          )
-        :
-        (<View>
-        <Text style={styles.randomNum}>{this.state.randoms.toFixed()}</Text>
-        <Sound
-          source={{
-          mp3: asset('random.wav')
+          style={{
+            width: 3,
+            height: 2,
+            margin: 0.02,
+            transform: [
+              {translate: [-1.5, 1.7, -3]},
+            ]
           }}
-          volume={10}
-        />
-      </View>)
-      
-      }
-      </View>) 
-      :
-      (<View></View>)
-      }
-        {/* <VrButton
-                onClick={() => this.handlePractice()}
-                style={{
-                  height: 0.2, 
-                  width: 0.4,
-                  backgroundColor:'black',
-                  borderRadius: 0.1,
-                  transform: [
-                    {translate: [1.2, 0.05, -0.5]},
-                  ]
-                  }}>
-            <Text
-            style={{
-              transform: [
-                {translate: [0.04, -0.01, 0]},
-              ]
+        >
+          {
+            this.state.readyGo <= 1 ? 
+            <View>
+              <Image 
+              style={{
+                width: 1,
+                height: 1,
+                opacity: this.props.opacity,
+                transform: [
+                  {translate:[1.02, -0.8, 0.8]}
+                ]
               }}
-            >Practice</Text>
-          </VrButton> */}
-      </View>
+              source={asset('demeg.png')}
+            >
+              </Image>
+            </View>
+            :
+            <Text style={styles.test} >{this.state.readyGo -1} </Text>
+          }
+          {
+            this.props.opacity === 1 ? (
+              <View>
+                <Sound
+                  source={{ mp3: asset('crash.mp3') }}
+                  volume={10}
+                />
+            {
+              this.state.statusPower ?
+                this.props.statusPunch ? (
+                  <View>
+                    <Text style={styles.randomNum}>{this.state.statusPower}</Text>
+                    <VrButton
+                      style={{
+                        opacity: 0.9,
+                        width: 0.7,
+                        height: 0.7,
+                        opacity: 0.5,
+                        borderRadius: 0.1,
+                        backgroundColor: 'black',
+                        margin: 0.02,
+                      }} 
+                      onEnter={() => {
+                        this.handleQuit()
+                      }}
+                    >
+                      <Text>Try Again</Text>
+                    </VrButton>
+                  </View>
+                )
+                :
+                (
+                  <View>
+                    <Text style={styles.randomNum}>You Did The Wrong Move</Text>
+                    <VrButton
+                      style={{
+                        opacity: 0.9,
+                        width: 0.7,
+                        height: 0.7,
+                        opacity: 0.5,
+                        borderRadius: 0.1,
+                        backgroundColor: 'black',
+                        margin: 0.02,
+                      }} 
+                      onEnter={() => {
+                        this.handleQuit()
+                      }}
+                    >
+                      <Text>Try Again</Text>
+                    </VrButton>
+                  </View>
+                )
+            :
+            (
+              <View>
+                <Text style={styles.randomNum}>{this.state.randoms.toFixed()}</Text>
+                <Sound
+                  source={{
+                  mp3: asset('random.wav')
+                  }}
+                  volume={10}
+                />
+              </View>)
+      
+            }
+            </View>
+          ) 
+            :
+            (<View></View>)
+          }
         
+      </View> 
+      )
+    } else if (this.props.type === 'history' && !this.state.isPractice) {
+      return (
+        <View style={styles.table}>
+          {
+            this.state.logs.map(log => {
+              return (
+                <View key={log._id}>
+                  <Text style={{fontSize: 0.2}}> GROAAAAAR </Text>
+                  <Text style={{fontSize: 0.2}}> {log.type} </Text>
+                  <Text style={{fontSize: 0.2}}> {log.power} </Text>
+                  <Text style={{fontSize: 0.2}}> {log.status} </Text>
+                </View>
+              )
+            })
+          }
+        </View>
       )
     } else {
       return (
@@ -361,5 +349,10 @@ const styles = {
     margin: 0.4,
     layoutOrigin: [0.5, 0.5],
     transform: [{translate: [0, 2, -8]}]    
+  },
+  table: {
+    flexWrap: 'wrap',
+    flexDirection: 'column',
+    width: 15,
   }
 }
