@@ -33,19 +33,24 @@ export default class Viewport extends React.Component{
         this.setState({
           randoms: Math.random()*(9999 - 1111) + 1111
         }) 
-        if(this.props.info && this.props.statusPunch) {
+        if(this.props.powerInfo && this.props.statusPunch) {
           setTimeout(() => {
             console.log('masuk ke true interval')
-            if(this.props.info < 4) {
+            // if(this.props.powerInfo === 0) {
+            //   this.setState({
+            //     statusPower: 'Very Weak'
+            //   })
+            // }
+            if(this.props.powerInfo < 4) {
               this.setState({
                 statusPower: 'Too Weak'
               })
             } 
-            else if (this.props.info < 7 ) {
+            else if (this.props.powerInfo < 7 ) {
               this.setState({
                 statusPower: 'Need More Power'
               })
-            } else if(this.props.info < 11) {
+            } else if(this.props.powerInfo < 11) {
               this.setState({
                 statusPower: 'Good'
               })
@@ -55,7 +60,7 @@ export default class Viewport extends React.Component{
               })
             }
           },4000)
-        } else if(this.props.info && !this.props.statusPunch) {
+        } else if(this.props.powerInfo && !this.props.statusPunch) {
           console.log(' masuk wrong')
           setTimeout(() => {
             this.setState({
@@ -90,16 +95,16 @@ export default class Viewport extends React.Component{
     this.handleReadyGo()
   }
 
-  setDisplayPower = () => {
-    if (this.props.info) {
-      setTimeout(()=>{
-        this.setState({
-          randoms: this.props.info
-        })
-      },9000)
-    }
+  // setDisplayPower = () => {
+  //   if (this.props.powerInfo) {
+  //     setTimeout(()=>{
+  //       this.setState({
+  //         randoms: this.props.powerInfo
+  //       })
+  //     },9000)
+  //   }
    
-  }
+  // }
 
   cancelQuit = () => {
     clearTimeout(this.handleQuit)
@@ -109,7 +114,7 @@ export default class Viewport extends React.Component{
     let payload = {
       type: this.props.type,
       status: this.state.statusPower,
-      power: Math.round(this.props.info.toFixed())
+      power: Math.round(this.props.powerInfo.toFixed())
     }
     setTimeout(()=>{
       axios.post('http://35.187.249.39:8000/log', payload, {
@@ -157,23 +162,24 @@ export default class Viewport extends React.Component{
         >
           {
             this.state.readyGo <= 1 ? 
-            <View>
-              <Image 
-              style={{
-                width: 1,
-                height: 1,
-                opacity: this.props.opacity,
-                transform: [
-                  {translate:[1.02, -0.8, 0.8]}
-                ]
-              }}
-              source={asset('demeg.png')}
-            >
-              </Image>
-            </View>
+              (<View>
+                <Image 
+                style={{
+                  width: 1,
+                  height: 1,
+                  opacity: this.props.opacity,
+                  transform: [
+                    {translate:[1.02, -0.8, 0.8]}
+                  ]
+                }}
+                source={asset('demeg.png')}
+              >
+                </Image>
+              </View>)
             :
             <Text style={styles.test} >{this.state.readyGo -1} </Text>
           }
+
           {
             this.props.opacity === 1 ? (
               <View>
@@ -207,7 +213,7 @@ export default class Viewport extends React.Component{
                 :
                 (
                   <View>
-                    <Text style={styles.randomNum}>You Did The Wrong Move</Text>
+                    <Text style={{...styles.randomNum, fontSize: 1}}>You Did The Wrong Move</Text>
                     <VrButton
                       style={{
                         opacity: 0.9,
@@ -230,6 +236,7 @@ export default class Viewport extends React.Component{
                     </VrButton>
                   </View>
                 )
+            //ini status powernya 
             :
             (
               <View>
@@ -265,7 +272,7 @@ export default class Viewport extends React.Component{
             transform: [
               {translate: [-0.5, 2, -8]}
             ]
-          }}> ceritanya NAMA </Text>
+          }}> Logs </Text>
           <View style={styles.table}>
             {
               this.state.logs.map(log => {
@@ -312,6 +319,9 @@ export default class Viewport extends React.Component{
                   setTimeout(()=>{
                     this.handlePractice()
                   }, 2000)
+                }}
+                onExit={() => {
+                  
                 }}
                 style={{
                   height: 0.2, 
