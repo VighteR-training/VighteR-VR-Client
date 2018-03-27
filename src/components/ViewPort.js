@@ -33,19 +33,24 @@ export default class Viewport extends React.Component{
         this.setState({
           randoms: Math.random()*(9999 - 1111) + 1111
         }) 
-        if(this.props.info && this.props.statusPunch) {
+        if(this.props.powerInfo && this.props.statusPunch) {
           setTimeout(() => {
             console.log('masuk ke true interval')
-            if(this.props.info < 4) {
+            // if(this.props.powerInfo === 0) {
+            //   this.setState({
+            //     statusPower: 'Very Weak'
+            //   })
+            // }
+            if(this.props.powerInfo < 4) {
               this.setState({
                 statusPower: 'Too Weak'
               })
             } 
-            else if (this.props.info < 7 ) {
+            else if (this.props.powerInfo < 7 ) {
               this.setState({
                 statusPower: 'Need More Power'
               })
-            } else if(this.props.info < 11) {
+            } else if(this.props.powerInfo < 11) {
               this.setState({
                 statusPower: 'Good'
               })
@@ -55,7 +60,7 @@ export default class Viewport extends React.Component{
               })
             }
           },4000)
-        } else if(this.props.info && !this.props.statusPunch) {
+        } else if(this.props.powerInfo && !this.props.statusPunch) {
           console.log(' masuk wrong')
           setTimeout(() => {
             this.setState({
@@ -90,16 +95,16 @@ export default class Viewport extends React.Component{
     this.handleReadyGo()
   }
 
-  setDisplayPower = () => {
-    if (this.props.info) {
-      setTimeout(()=>{
-        this.setState({
-          randoms: this.props.info
-        })
-      },9000)
-    }
+  // setDisplayPower = () => {
+  //   if (this.props.powerInfo) {
+  //     setTimeout(()=>{
+  //       this.setState({
+  //         randoms: this.props.powerInfo
+  //       })
+  //     },9000)
+  //   }
    
-  }
+  // }
 
   cancelQuit = () => {
     clearTimeout(this.handleQuit)
@@ -109,7 +114,7 @@ export default class Viewport extends React.Component{
     let payload = {
       type: this.props.type,
       status: this.state.statusPower,
-      power: Math.round(this.props.info.toFixed())
+      power: Math.round(this.props.powerInfo.toFixed())
     }
     setTimeout(()=>{
       axios.post('http://35.187.249.39:8000/log', payload, {
@@ -157,23 +162,24 @@ export default class Viewport extends React.Component{
         >
           {
             this.state.readyGo <= 1 ? 
-            <View>
-              <Image 
-              style={{
-                width: 1,
-                height: 1,
-                opacity: this.props.opacity,
-                transform: [
-                  {translate:[1.02, -0.8, 0.8]}
-                ]
-              }}
-              source={asset('demeg.png')}
-            >
-              </Image>
-            </View>
+              (<View>
+                <Image 
+                style={{
+                  width: 1,
+                  height: 1,
+                  opacity: this.props.opacity,
+                  transform: [
+                    {translate:[1.02, -0.8, 0.8]}
+                  ]
+                }}
+                source={asset('demeg.png')}
+              >
+                </Image>
+              </View>)
             :
             <Text style={styles.test} >{this.state.readyGo -1} </Text>
           }
+
           {
             this.props.opacity === 1 ? (
               <View>
@@ -265,7 +271,7 @@ export default class Viewport extends React.Component{
             transform: [
               {translate: [-0.5, 2, -8]}
             ]
-          }}> LOGS </Text>
+          }}> Logs </Text>
           <View style={styles.table}>
             {
               this.state.logs.map(log => {
@@ -306,39 +312,37 @@ export default class Viewport extends React.Component{
           {this.props.type 
           ? (
             <View>
-              <Video style={{width: 3.0, height:2.0, }} source={{uri: this.props.videoSrc}}  />
-          {/* bikin clear interval dari buttonnya pake state, liat di vrtoe */}
-              <VrButton
-                  onEnter={() => {
-                    console.log('msk prc')
-                    setTimeout(()=>{
-                      this.handlePractice()
-                    }, 3000)
-                  }}
-                  style={{
-                    
-                    justifyContent: 'center',
-                    opacity: 0.8,
-                    margin: 0.1,
-                    height: 0.2, 
-                    width: 3.5,
-                    backgroundColor: 'rgb(21, 2, 84)',
-                    transform: [
-                      {translate: [-0.35, 0.05, -0.5]},
-                    ]
-                  }}
-                >
-                <Text
+              <Video style={{width: 3.0, height:2.0, }} source={{uri: this.props.videoSrc}} />
+                <VrButton
+                onEnter={() => {
+                  setTimeout(()=>{
+                    this.handlePractice()
+                  }, 2000)
+                }}
                 style={{
-                  textAlign: 'center',
+                  
+                  justifyContent: 'center',
+                  opacity: 0.8,
+                  margin: 0.1,
+                  height: 0.2, 
                   width: 3.5,
+                  backgroundColor: 'rgb(21, 2, 84)',
                   transform: [
-                    {translate: [0.04, -0.01, 0]},
+                    {translate: [-0.35, 0.05, -0.5]},
                   ]
-                  }}
-                >Practice</Text>
-              </VrButton>
-          </View>
+                  }}>
+            <Text
+            style={{
+
+              textAlign: 'center',
+              width: 3.5,
+              transform: [
+                {translate: [0.04, -0.01, 0]},
+              ]
+              }}
+            >Practice</Text>
+          </VrButton>
+            </View>
           )
           :
           (

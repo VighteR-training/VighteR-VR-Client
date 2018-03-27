@@ -54,7 +54,6 @@ export default class VighteR_VR_Client extends React.Component {
       opc: 0,
       opcButton: 0.8,
       statusPunch: null,
-      lastPunch: []
     }
   }
 
@@ -111,7 +110,6 @@ export default class VighteR_VR_Client extends React.Component {
         this.setState({
           power: data.power,
           statusPunch: data.isTrue,
-          lastPunch: [...this.state.lastPunch, data.isTrue],
           opc: 1
         })
       }
@@ -133,10 +131,10 @@ export default class VighteR_VR_Client extends React.Component {
                 {translate: [-1.5, 1.7, -3]},
               ]
               }}></View>) :
-            this.state.type === 'jab' ? (<Viewport lastPunch={this.state.lastPunch} statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
-            this.state.type === 'uppercut' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
-            this.state.type === 'hook' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
-            (<Viewport setOpcButton={this.setOpcButton} info={this.state.power} type={this.state.type} videoSrc={'history.mp4'}/>)
+            this.state.type === 'jab' ? (<Viewport lastPunch={this.state.lastPunch} statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} powerInfo={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
+            this.state.type === 'uppercut' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} powerInfo={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
+            this.state.type === 'hook' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} powerInfo={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
+            (<Viewport setOpcButton={this.setOpcButton} powerInfo={this.state.power} type={this.state.type} />)
           }
           <View
           style={{
