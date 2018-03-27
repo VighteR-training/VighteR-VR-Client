@@ -12,6 +12,7 @@ function init(bundle, parent, options) {
       SimpleRaycaster
     ],
     cursorVisibility: "visible",
+    allowCarmelDeeplink: true,
     ...options,
   });
   vr.render = function() {
