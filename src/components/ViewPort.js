@@ -146,7 +146,6 @@ export default class Viewport extends React.Component{
         console.log(err)
       })
   }
-
   render(){
     if (this.state.isPractice ) {
       return (
@@ -264,7 +263,7 @@ export default class Viewport extends React.Component{
           <Text style={{
             fontSize: 0.3,
             borderRadius: 0.05,
-            backgroundColor: 'rgba(0, 0, 0, .5)',
+            backgroundColor: 'rgba(3, 8, 33, .7)',
             width: 10,
             textAlign: 'center',
             justifyContent: 'center',
@@ -278,7 +277,7 @@ export default class Viewport extends React.Component{
               this.state.logs.map(log => {
                 return (
                   <View key={log._id} style={{ 
-                    backgroundColor: 'rgba(0, 0, 0, .5)', 
+                    backgroundColor: 'rgba(79, 22, 24, .7)', 
                     width: 3, 
                     margin: .1, 
                     padding: .1
@@ -324,16 +323,22 @@ export default class Viewport extends React.Component{
                   
                 }}
                 style={{
+                  
+                  justifyContent: 'center',
+                  opacity: 0.8,
+                  margin: 0.1,
                   height: 0.2, 
-                  width: 0.4,
-                  backgroundColor:'black',
-                  borderRadius: 0.1,
+                  width: 3.5,
+                  backgroundColor: 'rgb(21, 2, 84)',
                   transform: [
-                    {translate: [1.2, 0.05, -0.5]},
+                    {translate: [-0.35, 0.05, -0.5]},
                   ]
                   }}>
             <Text
             style={{
+
+              textAlign: 'center',
+              width: 3.5,
               transform: [
                 {translate: [0.04, -0.01, 0]},
               ]

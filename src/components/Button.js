@@ -78,9 +78,9 @@ class Button extends React.Component {
           width: 0.7,
           height: 0.7,
           opacity: this.props.opcButton,
-          borderRadius: 0.1,
-          backgroundColor: 'black',
-          margin: 0.02,
+          borderRadius: 0.07,
+          backgroundColor: 'rgb(0, 0, 0)',
+          margin: 0.05,
         }} 
         onEnterSound={{
           wav: asset('select.wav')
