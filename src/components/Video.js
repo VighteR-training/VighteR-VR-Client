@@ -50,7 +50,7 @@ class VideoBoxing extends React.Component {
           justifyContent: 'center',
           layoutOrigin: [0.5, 0.5],
           transform: [
-            {translate: [-0.5, 2, -8]}
+            {translate: [1, 2, -8]}
           ]
         }}> Logs </Text>
         <View style={styles.table}>
@@ -120,7 +120,17 @@ const styles = {
     width: 16,
     layoutOrigin: [0.5, 0.5],
     transform: [
-      {translate: [-0.5, 1, -6]}
+      {translate: [1, 1, -6]}
+    ]
+  },
+  history: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: 16,
+    layoutOrigin: [0.5, 0.5],
+    transform: [
+      {translate: [-0.5, 0, -6]}
     ]
   }
 }

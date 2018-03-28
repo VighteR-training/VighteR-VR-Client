@@ -48,7 +48,7 @@ class AnimationPunch extends React.Component {
         }
       })
         .then(response => {
-          NativeModules.LinkingManager.openURL('http://192.168.43.8:8081/vr/')
+          NativeModules.LinkingManager.openURL('http://localhost:8081/vr/')
         })
         .catch(err => {
           console.log(err)
@@ -144,7 +144,7 @@ class AnimationPunch extends React.Component {
                   this.tryAgainFocusOut()
                 }}
               >
-                <Text style={{fontSize: 1}}>Try Again</Text>
+                <Text style={{fontSize: 0.4, textAlign: 'center'}}>Try Again</Text>
               </VrButton>
             </View>
           )

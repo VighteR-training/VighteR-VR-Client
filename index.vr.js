@@ -127,10 +127,7 @@ export default class VighteR_VR_Client extends React.Component {
   render() {
       return (
         <View>
-          <Sound
-          source={{ wav: asset('wind.wav') }}
-          volume={10}
-          />
+      
           <Pano source={asset('field.jpg')}/>
           {
             this.state.type === '' ? (<View style={{
