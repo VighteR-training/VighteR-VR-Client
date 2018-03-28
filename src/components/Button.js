@@ -32,7 +32,6 @@ class Button extends React.Component {
     ).start();
     this.setState({
       clickProgress: setTimeout(() => {
-        console.log('set')
         this.props.handleSubmit(this.props.animateType)
       }, 3000)
     })
@@ -54,7 +53,7 @@ class Button extends React.Component {
     this.props.onClick();
   }
   componentWillMount(){
-    console.log(this.props)
+    
   }
 
   render () {
@@ -78,9 +77,9 @@ class Button extends React.Component {
           width: 0.7,
           height: 0.7,
           opacity: this.props.opcButton,
-          borderRadius: 0.1,
-          backgroundColor: 'black',
-          margin: 0.02,
+          borderRadius: 0.07,
+          backgroundColor: 'rgb(0, 0, 0)',
+          margin: 0.05,
         }} 
         onEnterSound={{
           wav: asset('select.wav')

@@ -23,7 +23,7 @@ export default class VighteR_VR_Client extends React.Component {
   constructor() {
     super()
     this.state = {
-      email: 'vlootfie@gmail.com',
+      email: 'jkt.luthfi@gmail.com',
       type: '',
       selectSound: 'select.wav',
       buttonAnimate: [
@@ -54,7 +54,7 @@ export default class VighteR_VR_Client extends React.Component {
       opc: 0,
       opcButton: 0.8,
       statusPunch: null,
-      lastPunch: []
+      dataReady: true
     }
   }
 
@@ -81,7 +81,9 @@ export default class VighteR_VR_Client extends React.Component {
       ready: true,
       type: type
     }
-   let splitEmail = this.state.email.split('@')[0]
+   let splitEmail = this.state.email.split('@')[0] ?
+   (this.state.email.split('@')[0]).split('.')[0]:
+   this.state.email.split('@')[0]
     setTimeout(()=>{
       db.ref(splitEmail).set(setReady)
       console.log('yes')
@@ -98,20 +100,24 @@ export default class VighteR_VR_Client extends React.Component {
   }
 
   componentWillMount() {
-    let splitEmail = this.state.email.split('@')[0]
+    let splitEmail = this.state.email.split('@')[0] ?
+    (this.state.email.split('@')[0]).split('.')[0]:
+    this.state.email.split('@')[0]
     db.ref(splitEmail).set({power: null, ready: false})
     this.fetchScore()
   }
 
   fetchScore = () => {
-    let splitEmail = this.state.email.split('@')[0]
+    let splitEmail = this.state.email.split('@')[0] ?
+    (this.state.email.split('@')[0]).split('.')[0]:
+    this.state.email.split('@')[0]
     db.ref(splitEmail).on('value', (snapshot) => {
       let data = snapshot.val()
       if (!data.ready) {
         this.setState({
           power: data.power,
           statusPunch: data.isTrue,
-          lastPunch: [...this.state.lastPunch, data.isTrue],
+          dataReady: data.ready,
           opc: 1
         })
       }
@@ -121,13 +127,26 @@ export default class VighteR_VR_Client extends React.Component {
   render() {
       return (
         <View>
-          <Pano source={asset('chess-world.jpg')}/>
+          <Sound
+          source={{ wav: asset('wind.wav') }}
+          volume={10}
+          />
+          <Pano source={asset('field.jpg')}/>
           {
-            this.state.type === '' ? (<Viewport/>) :
-            this.state.type === 'jab' ? (<Viewport lastPunch={this.state.lastPunch} statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
-            this.state.type === 'uppercut' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
-            this.state.type === 'hook' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} info={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
-            (<Viewport setOpcButton={this.setOpcButton} info={this.state.power} type={this.state.type} videoSrc={'history.mp4'}/>)
+            this.state.type === '' ? (<View style={{
+              width: 3,
+              height: 2,
+              opacity: 0.9,
+              borderRadius: 0.1,
+              margin: 0.02,
+              transform: [
+                {translate: [-1.5, 1.7, -3]},
+              ]
+              }}></View>) :
+            this.state.type === 'jab' ? (<Viewport dataReady={this.state.dataReady} lastPunch={this.state.lastPunch} statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} powerInfo={this.state.power} type={this.state.type} videoSrc={'jab.mp4'}/>) :
+            this.state.type === 'uppercut' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} powerInfo={this.state.power} type={this.state.type} videoSrc={'uppercut.mp4'}/>) :
+            this.state.type === 'hook' ? (<Viewport statusPunch={this.state.statusPunch} setOpcButton={this.setOpcButton} opacity={this.state.opc} setReady={this.setReady} powerInfo={this.state.power} type={this.state.type} videoSrc={'hook.mp4'}/>) :
+            (<Viewport setOpcButton={this.setOpcButton} powerInfo={this.state.power} type={this.state.type} />)
           }
           <View
           style={{
