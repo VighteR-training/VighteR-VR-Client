@@ -4,10 +4,15 @@
 
 // Auto-generated content.
 import {VRInstance} from 'react-vr-web';
-
+import * as SimpleRaycaster from "simple-raycaster";
 function init(bundle, parent, options) {
   const vr = new VRInstance(bundle, 'VighteR_VR_Client', parent, {
     // Add custom options here
+    raycasters:[
+      SimpleRaycaster
+    ],
+    cursorVisibility: "visible",
+    allowCarmelDeeplink: true,
     ...options,
   });
   vr.render = function() {
